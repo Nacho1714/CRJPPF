@@ -1,0 +1,72 @@
+interface SeedPosition {
+    name: string;
+}
+
+interface SeedPositionData {
+    position: SeedPosition[];
+}
+
+export const initialPositionData: SeedPositionData = { 
+    position: [
+        {name: "ABOGADO"},
+        {name: "ABOGADO RESPONSABLE ADMINISTRASTIVO LEGAL"},
+        {name: "ABOGADO RESPONSABLE CONTENCIOSO ADMINISTRATIVO"},
+        {name: "ABOGADO SUMARIANTE"},
+        {name: "ABOGADO SUPERVISOR"},
+        {name: "ADMINISTRADOR DE BASE DE DATOS"},
+        {name: "ADMINISTRADOR DE SISTEMA OPERATIVO"},
+        {name: "ADMINISTRADOR DE SISTEMAS"},
+        {name: "ANALISTA DE SISTEMAS"},
+        {name: "ANALISTA PROGRAMADOR"},
+        {name: "ASESOR"},
+        {name: "ASESOR CONTABLE"},
+        {name: "ASESOR TECNICO"},
+        {name: "ASISTENTE ADMINISTRATIVO"},
+        {name: "ASISTENTE CONTABLE"},
+        {name: "ASISTENTE SOCIAL"},
+        {name: "ASISTENTE TECNICO"},
+        {name: "ASISTENTE TECNICO ADMINISTRATIVO"},
+        {name: "ASISTENTE TECNICO DE MANTENIMIENTO"},
+        {name: "ASISTENTE TECNICO INFORMATICO"},
+        {name: "ASISTENTE TECNICO PREVISIONAL"},
+        {name: "AUDITOR"},
+        {name: "AUXILIAR ADMINISTRATIVO"},
+        {name: "AUXILIAR DOCENTE"},
+        {name: "AUXILIAR TECNICO"},
+        {name: "CONSULTOR"},
+        {name: "CONSULTOR A"},
+        {name: "CONSULTOR C"},
+        {name: "COORDINADOR"},
+        {name: "COORDINADOR DE PRESUPUESTO"},
+        {name: "DIRECTOR"},
+        {name: "ESPECIALISTA EN SOFTWARE Y HARDWARE"},
+        {name: "ESPECIALISTA EN TECNICAS INFORMATICAS"},
+        {name: "INTENDENTE"},
+        {name: "JEFE DE COMUNICACIONES"},
+        {name: "JEFE DE DESARROLLO"},
+        {name: "JEFE DEPARTAMENTO"},
+        {name: "LIDER DE PROYECTO"},
+        {name: "ORDENANZA"},
+        {name: "PRESIDENTE"},
+        {name: "RESPALDO ADMINISTRATIVO"},
+        {name: "RESPALDO TECNICO"},
+        {name: "RESPONSABLE DE AUDITORIA CONT Y DE PROCEDIMIENTOS"},
+        {name: "RESPONSABLE DE AUDITORIA DE SISTEMAS"},
+        {name: "RESPONSABLE DE AUDITORIA LEGAL"},
+        {name: "RESPONSABLE DE AUDITORIA OPERACIONAL"},
+        {name: "RESPONSABLE DE PLANEAMIENTO Y DISEÑO ORGANIZACIONAL"},
+        {name: "RESPONSABLE DE RECURSOS DE HARDWARE"},
+        {name: "RESPONSABLE DEL CONTROL DE LOS RECUSOS INFORMATICO"},
+        {name: "RESPONSABLE DEL DESARROLLO Y CARRERA DEL PERSONAL"},
+        {name: "RESPONSABLE DOCENTE"},
+        {name: "RESPONSABLE TECNICO"},
+        {name: "RESPONSANBLE DE AUDITORIA LEGAL"},
+        {name: "SEGUNDO JEFE DEPARTAMENTO"},
+        {name: "SUBDIRECTOR"},
+        {name: "SUPERVISOR SECTORIAL"},
+        {name: "TECNICO CONTABLE"},
+        {name: "TECNICO EN CAPACITACION"},
+        {name: "TECNICO INFORMATICO ESPECIALIZADO"},
+        {name: "VICEPRESIDENTE"}
+    ]
+}
