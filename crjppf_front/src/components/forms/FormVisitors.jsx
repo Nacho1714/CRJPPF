@@ -95,7 +95,7 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
         enqueueSnackbar("Captura exitosa", {
             variant: 'success',
             anchorOrigin: {
-                vertical: 'bottom',
+                vertical: 'top',
                 horizontal: 'right',
             } 
         })
@@ -115,7 +115,7 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
             enqueueSnackbar(errorMessage, {
                 variant: 'error',
                 anchorOrigin: {
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'right',
                 } 
             })
@@ -158,7 +158,7 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
                 <Container>
 
                     <Modal.Header closeButton>
-                        <Modal.Title>Registrar Visitante</Modal.Title>
+                        <Modal.Title>Registdrar Visitante</Modal.Title>
                     </Modal.Header>
 
                         <Carousel

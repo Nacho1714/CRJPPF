@@ -50,7 +50,7 @@ services:
             - ${IMAGE_FOLDER_PATH}:/app/static/visitor
 
     front:
-        container_name: crjppf-app
+        container_name: crjppf-front
         image: nachodocker1714/crjppf-front:${FRONT_VERSION}
         restart: always
         depends_on:

@@ -1,6 +1,6 @@
 # Documentación
 ---
-## Variables de entorno
+## Servicios
 
 1. ### DB
 
@@ -19,6 +19,10 @@
     - `USER:` ${POSTGRES_USER}
     - `PASSWORD:` ${POSTGRES_PASSWORD}
     - `SCHEMA:` ${POSTGRES_DB}
+
+    #### Configurar TIMEZONE
+
+    Navegar hasta `postgres\postgresql.conf` y setear la variable timezone por el valor ***'America/Argentina/Buenos_Aires'***
 
 2. ### API: http://localhost:${PORT_API}
 
@@ -103,7 +107,7 @@ services:
             - ${IMAGE_FOLDER_PATH}:/app/static/visitor
 
     front:
-        container_name: crjppf-app
+        container_name: crjppf-front
         image: nachodocker1714/crjppf-front:${FRONT_VERSION}
         restart: always
         depends_on:

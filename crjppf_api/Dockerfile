@@ -1,7 +1,6 @@
 FROM node:20.8.1-alpine3.18 as dev
 EXPOSE 3000
 WORKDIR /app
-# ENV IMAGE_FOLDER_PATH=/app/static/visitor
 COPY package.json ./
 COPY prisma ./prisma/
 RUN npm install
@@ -28,8 +27,8 @@ RUN npm install --prod
 FROM node:20.8.1-alpine3.18 as prod
 EXPOSE 3000
 WORKDIR /app
-# ENV IMAGE_FOLDER_PATH=/app/static/visitor
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
-# COPY ${IMAGE_FOLDER_PATH} /app/static/visitor
+RUN apk add --no-cache tzdata
+ENV TZ=America/Argentina/Buenos_Aires
 CMD [ "node","dist/main.js" ]

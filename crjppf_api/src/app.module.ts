@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EmployeeModule } from './employee/employee.module';
 import { CommonModule } from './common/common.module';
-import { SeedModule } from './seed/seed.module';
 import { UserModule } from './user/user.module';
 import { SessionFailedModule } from './session_failed/session_failed.module';
 import { DirectorateModule } from './directorate/directorate.module';
@@ -22,7 +21,6 @@ import { join } from 'path';
         }),
         EmployeeModule,
         CommonModule,
-        SeedModule,
         UserModule,
         SessionFailedModule,
         DirectorateModule,

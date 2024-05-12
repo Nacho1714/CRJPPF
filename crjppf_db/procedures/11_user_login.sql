@@ -24,5 +24,4 @@ BEGIN
 END;
 $function$;
 
-
 -- SELECT user_login('baig', '43721804');
