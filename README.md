@@ -77,8 +77,8 @@ services:
         ports:
             - 8080:80
         environment:
-            PGADMIN_DEFAULT_EMAIL: root@google.com
-            PGADMIN_DEFAULT_PASSWORD: 12345
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         volumes:
             - ./pgadmin:/var/lib/pgadmin
             - ./pgadmin:/certs/server.cert
@@ -110,7 +110,7 @@ services:
             - db
             - api
         ports:
-            - ${PORT_FRONT}:80
+            - ${PORT_FRONT}:${PORT_FRONT}
         environment:
             VITE_API_URL: ${VITE_API_URL}
 ```
