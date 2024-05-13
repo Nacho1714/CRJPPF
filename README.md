@@ -1,5 +1,5 @@
 # Documentación
----
+
 ## Servicios
 
 1. ### DB
@@ -51,7 +51,7 @@
     | PGADMIN_DEFAULT_EMAIL | root@google.com | Correo de administrador |
     | PGADMIN_DEFAULT_PASSWORD | 12345 | Contraseña de administrador |
 
----
+
 ## Docker Compose
 
 ```yaml
@@ -118,7 +118,7 @@ services:
         environment:
             VITE_API_URL: ${VITE_API_URL}
 ```
----
+
 ## Comandos: 
 
 |***Navegar hasta el `docker-compose.yml`***|
