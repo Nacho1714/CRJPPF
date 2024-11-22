@@ -13,5 +13,10 @@ COPY triggers_function/credentials /docker-entrypoint-initdb.d
 COPY triggers_function/is_active /docker-entrypoint-initdb.d
 COPY triggers_function/10_generic.sql /docker-entrypoint-initdb.d
 COPY procedures /docker-entrypoint-initdb.d
+COPY insertion_scripts /docker-entrypoint-initdb.d
+
+USER postgres
+
+CMD ["postgres"]
 
 EXPOSE 5432

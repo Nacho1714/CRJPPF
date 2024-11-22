@@ -31,6 +31,16 @@ async function findAll(filter = '') {
     return response;
 }
 
+async function findByEmployee(idEmployee) {
+    const response = await fetchAPI({
+        endpoint: `destination/employee/${idEmployee}`, 
+        method: 'GET',
+        error: 'Error al obtener el destino'
+    });
+    return response;
+}
+
 export default {
     findAll,
+    findByEmployee
 }

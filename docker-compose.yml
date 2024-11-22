@@ -49,14 +49,14 @@ services:
         volumes:
             - ${IMAGE_FOLDER_PATH}:/app/static/visitor
 
-    front:
-        container_name: crjppf-front
-        image: nachodocker1714/crjppf-front:${FRONT_VERSION}
-        restart: always
-        depends_on:
-            - db
-            - api
-        ports:
-            - ${PORT_FRONT}:${PORT_FRONT}
-        environment:
-            VITE_API_URL: ${VITE_API_URL}
+    # front:
+    #     container_name: crjppf-front
+    #     image: nachodocker1714/crjppf-front:${FRONT_VERSION}
+    #     restart: always
+    #     depends_on:
+    #         - db
+    #         - api
+    #     ports:
+    #         - ${PORT_FRONT}:${PORT_FRONT}
+    #     environment:
+    #         VITE_API_URL: ${VITE_API_URL}

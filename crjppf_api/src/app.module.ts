@@ -12,6 +12,8 @@ import { VisitorModule } from './visitor/visitor.module';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { GovernmentInstitutionsModule } from './government_institutions/government_institutions.module';
+import { InstitutionalDepartmentsModule } from './institutional_departments/institutional_departments.module';
 
 @Module({
     imports: [
@@ -28,7 +30,9 @@ import { join } from 'path';
         DirectorateHasSectorModule,
         PositionModule,
         VisitorModule,
-        AuthModule
+        AuthModule,
+        GovernmentInstitutionsModule,
+        InstitutionalDepartmentsModule
     ],
 })
 export class AppModule {}

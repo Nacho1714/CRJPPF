@@ -46,10 +46,6 @@ a, a:hover {
     background-color: var(--primary);
 }
 
-/* .sidebar {
-} */
-
-
 #sidebar-container {
     background-color: var(--primary);
     min-height: 100vh;
@@ -136,6 +132,10 @@ a, a:hover {
     background-image: url("assets/frente-edificio.jpg");
     background-size: cover;
     background-position: center;
+}
+
+.messageInvalid{
+    color: red !important;
 }
 
 @media (max-width: 768px) {

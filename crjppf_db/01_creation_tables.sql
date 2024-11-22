@@ -14,15 +14,15 @@ CREATE TABLE "user" (
     "user_id"               INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name"                  VARCHAR(100)        NOT NULL,
     "last_name"             VARCHAR(100)        NOT NULL,
-    "profile"               CHAR(4)      UNIQUE NOT NULL,
+    "profile"               CHAR(8)      UNIQUE NOT NULL,
     "password"              VARCHAR(255)        NOT NULL,
     "last_login"            TIMESTAMP,           
     "is_active"             BOOLEAN             NOT NULL    DEFAULT TRUE,
     "created_at"            TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     "updated_at"            TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP
 
-    CHECK ("name" ~ '^[A-Za-z\s''ñÑ. ]+$')
-    CHECK ("last_name" ~ '^[A-Za-z\s''ñÑ. ]+$')
+    CHECK ("name" ~ '^[A-Za-zÁÉÍÓÚáéíóúÜüñÑ\s''.´]+$')
+    CHECK ("last_name" ~ '^[A-Za-zÁÉÍÓÚáéíóúÜüñÑ\s''.´]+$')
 );
 
 -----------------------------------------------------------------------------------------------
@@ -114,8 +114,33 @@ CREATE TABLE "employee" (
     "created_at"            TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     "updated_at"            TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP
 
-    CHECK ("name" ~ '^[A-Za-z\s''ñÑ. ]+$')
-    CHECK ("last_name" ~ '^[A-Za-z\s''ñÑ. ]+$')
+    CHECK ("name" ~ '^[A-Za-zÁÉÍÓÚáéíóúÜüñÑ\s''.´]+$')
+    CHECK ("last_name" ~ '^[A-Za-zÁÉÍÓÚáéíóúÜüñÑ\s''.´]+$')
+);
+
+----------------------------------------------------------------------------------------------
+-- GOVERNMENT INSTITUTIONS
+-----------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS "government_institutions" CASCADE;
+CREATE TABLE "government_institutions" (
+    "government_institutions_id"    INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "name"                          VARCHAR(100)        NOT NULL,
+    "created_at"                    TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    "updated_at"                    TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP
+
+);
+
+----------------------------------------------------------------------------------------------
+-- INSTITUTIONAL DEPARTMENTS
+-----------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS "institutional_departments" CASCADE;
+CREATE TABLE "institutional_departments" (
+    "institutional_departments_id"  INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "name"                          VARCHAR(100)        NOT NULL,
+    "government_institutions_fk"    INTEGER             NOT NULL    REFERENCES "government_institutions"(government_institutions_id),
+    "created_at"                    TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    "updated_at"                    TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP
+
 );
 
 -----------------------------------------------------------------------------------------------
@@ -123,27 +148,24 @@ CREATE TABLE "employee" (
 -----------------------------------------------------------------------------------------------
 DROP TABLE IF EXISTS "visitor" CASCADE;
 CREATE TABLE "visitor" (
-    "visitor_id"            INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "user_fk"               INTEGER             NOT NULL    REFERENCES "user"(user_id),
-    "employee_fk"           INTEGER             NOT NULL    REFERENCES "employee"(employee_id),
-    "destination_fk"        INTEGER             NOT NULL    REFERENCES "directorate_has_sector"(destination_id),
-    "name"                  VARCHAR(100)        NOT NULL,
-    "last_name"             VARCHAR(100)        NOT NULL,
-    "document_type"         document_options    NOT NULL,
-    "document_number"       VARCHAR(20)         NOT NULL,
-    "image"                 VARCHAR(50),
-    "note"                  TEXT,    
-    "entry"                 TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    "exit"                  TIMESTAMP,               
-    "created_at"            TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"            TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP
+    "visitor_id"                    INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "user_fk"                       INTEGER             NOT NULL    REFERENCES "user"(user_id),
+    "employee_fk"                   INTEGER             NOT NULL    REFERENCES "employee"(employee_id),
+    "destination_fk"                INTEGER             NOT NULL    REFERENCES "directorate_has_sector"(destination_id),
+    "institutional_departments_fk"  INTEGER                         REFERENCES "institutional_departments"(institutional_departments_id),
+    "another_origin"                VARCHAR(100),
+    "name"                          VARCHAR(100)        NOT NULL,
+    "last_name"                     VARCHAR(100)        NOT NULL,
+    "document_type"                 document_options    NOT NULL,
+    "document_number"               VARCHAR(20)         NOT NULL,
+    "image"                         VARCHAR(50),
+    "note"                          TEXT,    
+    "entry"                         TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    "exit"                          TIMESTAMP,               
+    "created_at"                    TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    "updated_at"                    TIMESTAMP           NOT NULL    DEFAULT CURRENT_TIMESTAMP
 
     CHECK ("name" ~ '^[A-Za-z\s''ñÑ. ]+$')
     CHECK ("last_name" ~ '^[A-Za-z\s''ñÑ. ]+$')
     CHECK ("document_number" ~ '^[A-Za-znÑ0-9]+$')
 );
-
-
-
-
-

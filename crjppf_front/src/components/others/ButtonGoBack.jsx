@@ -12,7 +12,7 @@ function ButtonGoBack() {
     }
 
     return (
-        <Button type='button' variant="primary" onClick={handleClick} className="btn w-75 align-self-center">
+        <Button type="button" variant="primary" onClick={handleClick} className="btn w-75 align-self-center">
             Atrás
         </Button>
     );

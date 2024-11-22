@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -92,23 +92,44 @@ model user {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model visitor {
-  visitor_id             Int                    @id @default(autoincrement())
-  user_fk                Int
-  employee_fk            Int
-  destination_fk         Int
-  name                   String                 @db.VarChar(100)
-  last_name              String                 @db.VarChar(100)
-  document_type          document_options
-  document_number        String                 @db.VarChar(20)
-  image                  String?                @db.VarChar(50)
-  note                   String?
-  entry                  DateTime               @default(now()) @db.Timestamp(6)
-  exit                   DateTime?              @db.Timestamp(6)
-  created_at             DateTime               @default(now()) @db.Timestamp(6)
-  updated_at             DateTime               @default(now()) @db.Timestamp(6)
-  directorate_has_sector directorate_has_sector @relation(fields: [destination_fk], references: [destination_id], onDelete: NoAction, onUpdate: NoAction)
-  employee               employee               @relation(fields: [employee_fk], references: [employee_id], onDelete: NoAction, onUpdate: NoAction)
-  user                   user                   @relation(fields: [user_fk], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  visitor_id                   Int                        @id @default(autoincrement())
+  user_fk                      Int
+  employee_fk                  Int
+  destination_fk               Int
+  institutional_departments_fk Int?
+  name                         String                     @db.VarChar(100)
+  last_name                    String                     @db.VarChar(100)
+  document_type                document_options
+  document_number              String                     @db.VarChar(20)
+  image                        String?                    @db.VarChar(50)
+  note                         String?
+  entry                        DateTime                   @default(now()) @db.Timestamp(6)
+  exit                         DateTime?                  @db.Timestamp(6)
+  created_at                   DateTime                   @default(now()) @db.Timestamp(6)
+  updated_at                   DateTime                   @default(now()) @db.Timestamp(6)
+  another_origin               String?                    @db.VarChar(100)
+  directorate_has_sector       directorate_has_sector     @relation(fields: [destination_fk], references: [destination_id], onDelete: NoAction, onUpdate: NoAction)
+  employee                     employee                   @relation(fields: [employee_fk], references: [employee_id], onDelete: NoAction, onUpdate: NoAction)
+  institutional_departments    institutional_departments? @relation(fields: [institutional_departments_fk], references: [institutional_departments_id], onDelete: NoAction, onUpdate: NoAction)
+  user                         user                       @relation(fields: [user_fk], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model government_institutions {
+  government_institutions_id Int                         @id @default(autoincrement())
+  name                       String                      @db.VarChar(100)
+  created_at                 DateTime                    @default(now()) @db.Timestamp(6)
+  updated_at                 DateTime                    @default(now()) @db.Timestamp(6)
+  institutional_departments  institutional_departments[]
+}
+
+model institutional_departments {
+  institutional_departments_id Int                     @id @default(autoincrement())
+  name                         String                  @db.VarChar(100)
+  government_institutions_fk   Int
+  created_at                   DateTime                @default(now()) @db.Timestamp(6)
+  updated_at                   DateTime                @default(now()) @db.Timestamp(6)
+  government_institutions      government_institutions @relation(fields: [government_institutions_fk], references: [government_institutions_id], onDelete: NoAction, onUpdate: NoAction)
+  visitor                      visitor[]
 }
 
 enum document_options {

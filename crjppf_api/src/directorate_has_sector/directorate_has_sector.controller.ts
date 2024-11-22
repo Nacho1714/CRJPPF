@@ -37,6 +37,15 @@ export class DirectorateHasSectorController {
         return this.directorateHasSectorService.findOne(id);
     }
 
+    
+    /**
+     * Busca dirección y sector por empleado
+     */
+    @Get('employee/:id')
+    findByEmployee(@Param('id', ParseIntPipe, ParamIdPipeTsPipe) id: number): Promise<DirectorateHasSector> {
+        return this.directorateHasSectorService.findByEmployee(id);
+    }
+
     /**
      * Actualizar una relación entre dirección y sector por su id
      */

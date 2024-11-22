@@ -56,6 +56,25 @@ export class DirectorateHasSectorService {
         return dhs;
     }
 
+    async findByEmployee(id: number): Promise<DirectorateHasSector> {
+
+        try {
+
+            const employee = await this.prisma.employee.findUnique({
+                where: {
+                    employee_id: id
+                }
+            })
+
+            const dhs = await this.findOne(employee.destination_fk)
+            
+            return dhs
+
+        } catch (error) {
+            this.prisma.handleDBExeption(error, this.logger);
+        }
+    }
+
     async update(id: number, updateDirectorateHasSectorDto: UpdateDirectorateHasSectorDto): Promise<DirectorateHasSector> {
     
         await this.findOne(id);

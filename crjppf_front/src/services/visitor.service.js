@@ -22,11 +22,40 @@ async function fetchAPI({endpoint, method = 'GET', body = null, error = null}) {
     return result;
 }
 
-async function findAll(filter = '') {
+async function findAll(filter = '', dateRangeDto = null) {
+
     const response = await fetchAPI({
-        endpoint: `visitor?${filter}`, 
-        method: 'GET',
+        endpoint: `visitor/findAll?${filter}`, 
+        method: 'POST',
+        body: dateRangeDto,
         error: 'Error al obtener los visitantes'
+    });
+    return response;
+}
+
+async function getDates() {
+    const response = await fetchAPI({
+        endpoint: `visitor/date`, 
+        method: 'GET',
+        error: 'Error al obtener las fechas'
+    });
+    return response;
+}
+
+async function getYears() {
+    const response = await fetchAPI({
+        endpoint: `visitor/year`, 
+        method: 'GET',
+        error: 'Error al obtener los años'
+    });
+    return response;
+}
+
+async function getMonth(year) {
+    const response = await fetchAPI({
+        endpoint: `visitor/month/${year}`, 
+        method: 'GET',
+        error: 'Error al obtener los meses'
     });
     return response;
 }
@@ -40,9 +69,9 @@ async function findById(id) {
     return response;
 }
 
-async function findAllMapping(filter = '') {
+async function findAllMapping(filter = '', dateRangeDto = null) {
 
-    const visitors = await findAll(filter);
+    const visitors = await findAll(filter, dateRangeDto);
     return visitors.map(visitor => {
         const { user, directorate_has_sector, employee, ...rest } = visitor;
         return {
@@ -57,15 +86,25 @@ async function findAllMapping(filter = '') {
 async function findByIdMapping(id) {
 
     const visitor = await findById(id);
-    
-    const { user, directorate_has_sector, employee, ...rest } = visitor;
+
+    const { user, directorate_has_sector, employee, institutional_departments, another_origin, ...rest } = visitor;
 
     return {
         user: user.profile,
         office: directorate_has_sector.name,
         employee: `${employee.last_name} ${employee.name}`,
+        institutional_departments: institutional_departments?.name ?? another_origin,
+        government_institutions: institutional_departments?.government_institutions?.name ?? 'Otro',
         ...rest
     };
+}
+
+async function findBySummary(startDateState, endDateState) {
+
+    const startDate = startDateState.format("YYYY-MM-DD"); // Ejemplo: '2024-11-01'
+    const endDate = endDateState.format("YYYY-MM-DD");   // Ejemplo: '2024-11-30'
+
+    return findAllMapping('', {startDate, endDate})
 }
 
 async function findAllPending(mapping = true) {
@@ -76,6 +115,8 @@ async function findAllPending(mapping = true) {
 }
 
 async function update(id, newVisitor) {
+
+    console.log('newVisitor',newVisitor)
 
     const response = await fetchAPI({
         endpoint: `visitor/${id}`, 
@@ -115,4 +156,8 @@ export default {
     findById,
     update,
     create,
+    getYears,
+    getMonth,
+    findBySummary,
+    getDates
 }

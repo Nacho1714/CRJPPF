@@ -6,6 +6,7 @@ import RoutePrivate from './components/RoutePrivate'
 
 import Login from './pages/Login';
 import Detail from './pages/Detail';
+import Summary from './pages/Summary'
 
 import Dashboard from './pages/Dashboard';
 
@@ -51,6 +52,12 @@ function App() {
             <Route path="/visitor/:id" exact={true} element={
                 <RoutePrivate isAutenticate={isAutenticate} setIsAutenticate={setIsAutenticate}>
                     <Detail />
+                </RoutePrivate>
+            } />
+            
+            <Route path="/summary" exact={true} element={
+                <RoutePrivate isAutenticate={isAutenticate} setIsAutenticate={setIsAutenticate}>
+                    <Summary />
                 </RoutePrivate>
             } />
 

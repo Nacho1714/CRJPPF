@@ -24,8 +24,8 @@ export default function TableVisitors({ visitors, formConfirm }) {
         { 
             field: 'name', 
             headerName: 'Visitante', 
-            renderCell: (params) => (<Link to={`/visitor/${params.row.visitor_id}`}>{params.row.last_name + ' ' + params.row.name}</Link>),
-            valueGetter: (params) => params.row.name + ' ' + params.row.last_name,  
+            renderCell: (params) => (<Link to={`/visitor/${params.row?.visitor_id}`}>{params.row?.last_name + ' ' + params.row?.name}</Link>),
+            valueGetter: (params) => params.row?.name + ' ' + params.row?.last_name,  
             flex: 2,
         },
         { field: 'employee', headerName: 'Empleado', flex: 2 },
@@ -34,7 +34,7 @@ export default function TableVisitors({ visitors, formConfirm }) {
         { 
             field: 'entry', 
             headerName: 'Entrada',
-            renderCell: (params) => (moment.utc(params.row.entry).format('HH:mm'))
+            renderCell: (params) => (moment.utc(params.row?.entry).format('HH:mm'))
         },
         {
             field: 'exit',
@@ -42,7 +42,7 @@ export default function TableVisitors({ visitors, formConfirm }) {
             flex: 1,
             renderCell: (params) => (
                 <Button
-                    onClick={() => handleExit(params.row.visitor_id)}
+                    onClick={() => handleExit(params.row?.visitor_id)}
                     variant="primary"
                     type='submit'
                     className="btn "

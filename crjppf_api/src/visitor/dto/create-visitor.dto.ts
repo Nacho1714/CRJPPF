@@ -37,6 +37,23 @@ export class CreateVisitorDto {
     destination_fk: number;
 
     /**
+     * Foreign Key del departamento institucional
+     * @example 1
+     */
+    @IsNumber()
+    @IsPositive()
+    @Max(2147483647)
+    @IsOptional()
+    @Type(() => Number)
+    institutional_departments_fk?: number;
+    
+    @Matches("^[A-Za-z\s''ñÑ. ]+$")
+    @MinLength(2)
+    @MaxLength(100)
+    @IsOptional()
+    another_origin?: string;
+
+    /**
      * Nombre del visitante
      * @example 'Juan'
      */
@@ -79,7 +96,7 @@ export class CreateVisitorDto {
     @IsString()
     @MaxLength(200)
     @IsOptional()
-    note?: string = null;
+    note?: string;
 
     /**
      * Fecha de ingreso

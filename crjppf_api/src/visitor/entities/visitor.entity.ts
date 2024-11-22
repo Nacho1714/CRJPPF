@@ -27,6 +27,14 @@ export class Visitor {
     destination_fk: number;
 
     /**
+     * Foreign Key del departamento institucional
+     * @example 1
+     */
+    institutional_departments_fk?: number = null;
+
+    another_origin?: string = null;
+
+    /**
      * Nombre del visitante
      * @example 'Juan'
      */

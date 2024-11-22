@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { join } from 'path';
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
-import { CreateVisitorDto, FindVisitorDto, UpdateVisitorDto } from './dto';
+import { CreateVisitorDto, DateRangeDto, FindVisitorDto, UpdateVisitorDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Visitor } from './entities/visitor.entity';
 import { UserService } from '../user/user.service';
@@ -50,7 +50,10 @@ export class VisitorService {
         return visitor;
     }
 
-    async findAll(findVisitorDto: FindVisitorDto) {
+    async findAll(
+        findVisitorDto: FindVisitorDto,
+        dateRange: DateRangeDto
+    ) {
 
         const { limit, offset, entry, exit } = findVisitorDto;
 
@@ -59,7 +62,7 @@ export class VisitorService {
                 take: limit,
                 skip: offset,
                 where:{
-                    entry: getRecordsPerDay(entry),
+                    entry: getRecordsPerDay(dateRange),
                     exit: getOptionQuery(exit)
                 },
                 include: {
@@ -96,6 +99,55 @@ export class VisitorService {
         }
     }
 
+    async getDates(){
+        try {
+            const result = await this.prisma.$queryRaw<{unique_date: string}[]>`
+                SELECT DISTINCT TO_CHAR(entry, 'YYYY-MM-DD') AS unique_date
+                FROM visitor
+                ORDER BY unique_date;
+            `;
+            return result.map(row => row.unique_date);
+        } catch (error) {
+            this.prisma.handleDBExeption(error, this.logger);
+        }
+    }
+    
+    async getYears(){
+        try {
+            const result = await this.prisma.$queryRaw<{year: number}[]>`
+                SELECT DISTINCT EXTRACT(YEAR FROM entry) AS year
+                FROM visitor
+                WHERE exit IS NOT NULL
+                ORDER BY year DESC
+            `;
+            return result.map(row => row.year);
+        } catch (error) {
+            this.prisma.handleDBExeption(error, this.logger);
+        }
+    }
+
+    async getMonth(year: number) {
+
+        // const monthsInText = [
+        //     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+        //     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        // ];
+    
+        try {
+            const result = await this.prisma.$queryRaw<{month: number}[]>`
+                SELECT DISTINCT EXTRACT(MONTH FROM entry) AS month
+                FROM visitor
+                WHERE EXTRACT(YEAR FROM entry) = ${year}
+                AND exit IS NOT NULL
+                ORDER BY month ASC
+            `;
+
+            return result.map(row => row.month);
+        } catch (error) {
+            this.prisma.handleDBExeption(error, this.logger);
+        }
+    }
+
     async findOne(id: number): Promise<Visitor> {
     
         let visitor: Visitor;
@@ -119,6 +171,16 @@ export class VisitorService {
                             last_name: true,
                             name: true,
                         },
+                    },
+                    institutional_departments: {
+                        select: {
+                            name: true,
+                            government_institutions: {
+                                select: {
+                                    name: true
+                                }
+                            }
+                        }
                     }
                 }
             }) as Visitor;

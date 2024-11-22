@@ -1,14 +1,11 @@
 INSERT INTO "public"."directorate_has_sector" ("directorate_fk", "sector_fk") VALUES
-(1, 2);
-INSERT INTO "public"."directorate_has_sector" ("directorate_fk", "sector_fk") VALUES
-(2, 5);
-INSERT INTO "public"."directorate_has_sector" ("directorate_fk", "sector_fk") VALUES
-(2, 6);
-INSERT INTO "public"."directorate_has_sector" ("directorate_fk", "sector_fk") VALUES
+(1, 2),
+(2, 5),
+(2, 6),
 (2, 11),
 (2, 12),
 (3, 13),
-(4, 13),
+(4, 1),
 (4, 4),
 (4, 7),
 (4, 8),

@@ -4,6 +4,10 @@ import { useSnackbar } from 'notistack';
 import { Button, Modal, Carousel, Col, Container, Row } from 'react-bootstrap';
 import { FaExclamationCircle, FaQuestionCircle } from "react-icons/fa";
 import TooltipText from '../../components/TooltipText';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
 
 import Camera from '../Camera'
 import { base64ImageToFile } from '../../helpers/format-image';
@@ -16,22 +20,31 @@ import OfficeService from '../../services/dhs.service';
 import EmployeeService from '../../services/employee.service';
 import UserService from '../../services/user.service';
 import VisitorService from '../../services/visitor.service';
-import visitorService from '../../services/visitor.service';
-import employeeService from '../../services/employee.service';
+import GovernmentInstitutionsService from '../../services/government_institutions.service';
+import InstitutionalDepartmentsService from '../../services/institutional_departments.service';
 
 export default function FormVisitors({ setShowConfirm, setAction }) {
     
     const [show, setShow] = useState(false);
     const [indexModal, setIndexModal] = useState(0);
 
-    const [officeId, setOfficeId] = useState("");
+    const [data, setData] = useState({
+        offices: [],
+        employees: []
+    });
     const [offices, setOffices] = useState([]);
-
-    const [employeeId, setEmployeeId] = useState("");
     const [employees, setEmployees] = useState([]);
+    const [governmentInstitutions, setGovernmentInstitutions] = useState([]);
+    const [institutionalDepartments, setInstitutionalDepartments] = useState([]);
 
     const webcamRef = useRef(null);
     const [capturedImage, setCapturedImage] = useState(null);
+
+    const [checked, setChecked] = useState(false);
+
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
 
     const handleClose = () => {
         setShow(false)
@@ -41,11 +54,53 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
     
     const handleChangeOffice = async (id) => {
 
+        if(id === '') {
+            setEmployees(data.employees)
+            return
+        }
+
+        try {
+            const employees = await EmployeeService.findByOffice(id)
+            setEmployees(employees)
+        } catch (errorMessage) {
+            enqueueSnackbar(errorMessage, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }
+            })
+        }
+    }
+
+    const handleChangeEmployee = async (id) => {
+
+        if(id === '') {
+            setOffices(data.offices)
+            return
+        }
+
+        try {
+            const office = await OfficeService.findByEmployee(id)
+            setOffices([office])
+        } catch (errorMessage) {
+            enqueueSnackbar(errorMessage, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }
+            })
+        }
+    }
+
+    const handleChangeGovernmentInstitutions = async(id) => {
+
         if(id === '') return
 
         try {
-            const employees = await employeeService.findByOffice(id)
-            setEmployees(employees)
+            const institutionalDepartments = await InstitutionalDepartmentsService.findByGovernmentInstitution(id)
+            setInstitutionalDepartments(institutionalDepartments)
         } catch (errorMessage) {
             enqueueSnackbar(errorMessage, {
                 variant: 'error',
@@ -62,8 +117,14 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
         try {
             const offices = await OfficeService.findAll()
             const employees = await EmployeeService.findAll()
+            const governmentInstitutions = await GovernmentInstitutionsService.findAll()
+            setData({
+                offices,
+                employees
+            })
             setOffices(offices)
             setEmployees(employees)
+            setGovernmentInstitutions(governmentInstitutions)
         } catch (errorMessage) {
             enqueueSnackbar(errorMessage, {
                 variant: 'error',
@@ -78,15 +139,17 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
     };
 
     const initialValues = {
-
-        employee_fk: '',
-        destination_fk: '',
-        name: '',
-        last_name: '',
-        document_type: '',
-        document_number: '',
-        note: ''
-    }
+        employee_fk: "",
+        destination_fk: "",
+        name: "",
+        last_name: "",
+        document_type: "",
+        document_number: "",
+        government_institutions: "",
+        institutional_departments_fk: "",
+        // other: "",
+        note: "",
+      };
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -121,10 +184,22 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
             })
         }
 
-        for (const key in values) {
-            if (key in values) {
-                formData.append(key, values[key]);
-            }
+        const {government_institutions, institutional_departments_fk, ...rest} = values
+
+        if (checked) {
+            
+            // input (otro)
+            rest.another_origin = institutional_departments_fk
+
+        } else {
+
+            // select
+            rest.institutional_departments_fk = parseInt(institutional_departments_fk)
+
+        }
+
+        for (const key in rest) {
+            if (key in rest) formData.append(key, rest[key]);
         }
 
         setShow(false)
@@ -221,7 +296,10 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
 
                                                     <Row>
 
-                                                        <h3 className="mb-4">Visitante</h3>
+                                                        {/* <h3 className="mb-4">Datos del Visitante</h3> */}
+                                                        <Divider className='mb-3 mt-3' textAlign="left">
+                                                            <Chip color="primary" label="Datos del Visitante" size="medium" />
+                                                        </Divider>
 
                                                         {/* name */}
                                                         <Col xs={3}>
@@ -384,54 +462,58 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
 
                                                     <Row>
 
+                                                        {/* <h3 className="mb-4">Destino del Visitante</h3> */}
+                                                        <Divider className='mb-3 mt-3' textAlign="left">
+                                                            <Chip color="primary" label="Destino del Visitante" size="medium" />
+                                                        </Divider>
+
                                                         {/* office */}
                                                         <Col xs={6}>
 
-                                                        <div className="mb-3">
-                                                            <label className="form-label" htmlFor="destination_fk">
+                                                            <div className="mb-3">
+                                                                <label className="form-label" htmlFor="destination_fk">
 
-                                                                Oficina <TooltipText
-                                                                    color={'text-danger'}
-                                                                    text={<FaExclamationCircle />}
-                                                                    msg={'campo obligatorio'}
-                                                                    direction={'right'}
+                                                                    Oficina <TooltipText
+                                                                        color={'text-danger'}
+                                                                        text={<FaExclamationCircle />}
+                                                                        msg={'campo obligatorio'}
+                                                                        direction={'right'}
+                                                                    />
+
+                                                                </label>
+
+                                                                    <Field
+                                                                        as='select'
+                                                                        className='form-select'
+                                                                        name='destination_fk'
+                                                                        id='destination_fk'
+                                                                        validate={(e) => handleChangeOffice(e)}
+                                                                    >
+
+                                                                        <option value=''>Seleccione una opcion</option>
+                                                                        {
+                                                                            offices.map((office) => (
+                                                                                <option 
+                                                                                    key={office.destination_id} 
+                                                                                    value={office.destination_id}
+                                                                                >
+                                                                                    {office.name}
+                                                                                </option>
+                                                                            ))
+                                                                        }
+
+                                                                    </Field>
+
+                                                                <ErrorMessage
+                                                                    name='destination_fk'
+                                                                    component={() => (
+                                                                        <div className="messageInvalid">
+                                                                            {errors.destination_fk}
+                                                                        </div>
+                                                                    )}
                                                                 />
 
-                                                            </label>
-
-                                                                <Field
-                                                                    as='select'
-                                                                    className='form-select'
-                                                                    name='destination_fk'
-                                                                    id='destination_fk'
-                                                                    validate={(e) => handleChangeOffice(e)}
-                                                                >
-
-                                                                    <option value=''>Seleccione una opcion</option>
-                                                                    {
-                                                                        offices.map((office) => (
-                                                                            <option 
-                                                                                key={office.destination_id} 
-                                                                                value={office.destination_id}
-                                                                            >
-                                                                                {office.name}
-                                                                            </option>
-                                                                        ))
-                                                                    }
-
-                                                                </Field>
-
-                                                            
-                                                            <ErrorMessage
-                                                                name='destination_fk'
-                                                                component={() => (
-                                                                    <div className="messageInvalid">
-                                                                        {errors.destination_fk}
-                                                                    </div>
-                                                                )}
-                                                            />
-
-                                                        </div>
+                                                            </div>
 
                                                         </Col>
 
@@ -455,6 +537,7 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
                                                                     className='form-select'
                                                                     name='employee_fk'
                                                                     id='employee_fk'
+                                                                    validate={(e) => handleChangeEmployee(e)}
                                                                 >
 
                                                                     <option value=''>Seleccione una opcion</option>
@@ -476,6 +559,158 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
                                                                         </div>
                                                                     )}
                                                                 />
+
+                                                            </div>
+
+                                                        </Col>
+         
+                                                    </Row>
+
+                                                    <Row>
+
+                                                        {/* <h3 className="mb-4">Origen del Visitante</h3> */}
+                                                        <Divider className='mb-3 mt-3' textAlign="left">
+                                                            <Chip color="primary" label="Origen del Visitante" size="medium" />
+                                                        </Divider>
+
+                                                        {/* government institutions */}
+                                                        <Col xs={3}>
+
+                                                            <div className="mb-3">
+                                                                <label className="form-label" htmlFor="government_institutions">
+
+                                                                    Jurisdicción
+
+                                                                </label>
+
+                                                                <Field
+                                                                    as='select'
+                                                                    className='form-select'
+                                                                    name='government_institutions'
+                                                                    id='government_institutions'
+                                                                    validate={(e) => handleChangeGovernmentInstitutions(e)}
+                                                                    disabled={checked}
+                                                                >
+
+                                                                    <option value=''>Seleccione una opcion</option>
+                                                                    {
+                                                                        governmentInstitutions.map(({government_institutions_id, name}) => (
+                                                                            <option key={government_institutions_id} value={government_institutions_id}>
+                                                                                {`${name}`}
+                                                                            </option>
+                                                                        ))
+                                                                    }
+
+                                                                </Field>
+
+                                                            </div>
+
+                                                        </Col>
+
+                                                        {/* institutional departments */}
+                                                        <Col xs={3}>
+
+                                                            <div className="mb-3">
+                                                                <label className="form-label" htmlFor="institutional_departments_fk">
+
+                                                                    Institución { !checked && 
+                                                                        <>
+                                                                            <TooltipText
+                                                                                color={'text-danger'}
+                                                                                text={<FaExclamationCircle />}
+                                                                                msg={'campo obligatorio'}
+                                                                                direction={'right'}
+                                                                            />
+                                                                        </>
+                                                                    }
+
+                                                                </label>
+
+                                                                <Field
+                                                                    as='select'
+                                                                    className='form-select'
+                                                                    name='institutional_departments_fk'
+                                                                    id='institutional_departments_fk'
+                                                                    disabled={checked}
+                                                                >
+
+                                                                    <option value=''>Seleccione una opcion</option>
+                                                                    {
+                                                                        institutionalDepartments.map(({institutional_departments_id, name}) => (
+                                                                            <option key={institutional_departments_id} value={institutional_departments_id}>
+                                                                                {`${name}`}
+                                                                            </option>
+                                                                        ))
+                                                                    }
+
+                                                                </Field>
+
+                                                                {
+                                                                    !checked && <>
+                                                                        <ErrorMessage
+                                                                            name='institutional_departments_fk'
+                                                                            component={() => (
+                                                                                <div className="messageInvalid">
+                                                                                    {errors.institutional_departments_fk}
+                                                                                </div>
+                                                                            )}
+                                                                        />
+                                                                    </>
+                                                                }
+
+                                                            </div>
+
+                                                        </Col>
+
+                                                        <Col xs={2}>
+                                                            <FormControlLabel 
+                                                                checked={checked}
+                                                                onChange={handleChange}
+                                                                control={<Switch />} 
+                                                                label="Otro" 
+                                                            />
+                                                        </Col>
+
+                                                        {/* otro */}
+                                                        <Col xs={4}>
+
+                                                            <div className="mb-3">
+
+                                                                <label className="form-label" htmlFor="institutional_departments_fk">
+
+                                                                    Otro Origen { checked && 
+                                                                        <>
+                                                                            <TooltipText
+                                                                                color={'text-danger'}
+                                                                                text={<FaExclamationCircle />}
+                                                                                msg={'campo obligatorio'}
+                                                                                direction={'right'}
+                                                                            />
+                                                                        </>
+                                                                    }
+
+                                                                </label>
+
+                                                                <Field
+                                                                    className='form-control'
+                                                                    placeholder="Ingrese el nombre del origen"
+                                                                    name='institutional_departments_fk'
+                                                                    id='institutional_departments_fk'
+                                                                    disabled={!checked}
+                                                                />
+
+                                                                {
+                                                                    checked && <>
+                                                                        <ErrorMessage
+                                                                            name='institutional_departments_fk'
+                                                                            component={() => (
+                                                                                <div className="messageInvalid">
+                                                                                    {errors.institutional_departments_fk}
+                                                                                </div>
+                                                                            )}
+                                                                        />
+                                                                    </>
+                                                                }
 
                                                             </div>
 

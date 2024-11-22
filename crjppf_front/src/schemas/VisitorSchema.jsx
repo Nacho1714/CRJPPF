@@ -11,7 +11,7 @@ export default function VisitorSchema() {
         destination_fk: Yup
         .number()
         .required('El campo es obligatorio'),
-
+        
         name: Yup
         .string()
         .min(2, 'El valor debe tener al menos 2 caracteres')
@@ -37,6 +37,10 @@ export default function VisitorSchema() {
         .matches(/^[A-Za-znÑ0-9]+$/, 'El documento no es valido')
         .required('El campo es obligatorio'),
         
+        institutional_departments_fk: Yup
+        .string()
+        .required('El campo es obligatorio'),
+
         note: Yup
         .string()
         .max(1000, 'El valor debe ser hasta 1000 caracteres'),

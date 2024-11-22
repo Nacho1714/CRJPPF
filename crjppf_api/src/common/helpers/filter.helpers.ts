@@ -1,12 +1,15 @@
 import moment from 'moment';
+import { DateRangeDto } from 'src/visitor/dto';
 
-export const getRecordsPerDay = (date: Date) => {
+export const getRecordsPerDay = (dateRange: DateRangeDto) => {
 
-    if (!date) return undefined;
+    if (!dateRange) return undefined;
+
+    const {startDate, endDate} = dateRange
 
     return {
-        gte: moment.utc(date).startOf('day').toDate(),
-        lte: moment.utc(date).endOf('day').toDate()
+        gte: moment.utc(startDate).startOf('day').toDate(),
+        lte: moment.utc(endDate).endOf('day').toDate()
     }
 }
 

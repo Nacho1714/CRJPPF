@@ -108,7 +108,7 @@ export default function FormConfirm({ showConfirm, setShowConfirm, action, setAc
                     </Button>
 
                     {loading ? (
-                        <Button type='button' variant="primary" disabled>
+                        <Button type="button" variant="primary" disabled>
                             <Spinner
                                 as="span"
                                 animation="border"

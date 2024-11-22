@@ -2,8 +2,8 @@ CREATE OR REPLACE FUNCTION validate_profile()
 RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.profile IS NOT NULL THEN
-        IF LENGTH(NEW.profile) <> 4 THEN
-            RAISE EXCEPTION 'El perfil "%" es invalido (MAX 4 letras).', NEW.profile;
+        IF LENGTH(NEW.profile) > 8 THEN
+            RAISE EXCEPTION 'El perfil "%" es invalido (MAX 8 letras).', NEW.profile;
         END IF;
     END IF;
     RETURN NEW;

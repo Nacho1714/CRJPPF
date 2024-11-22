@@ -13,9 +13,13 @@ import '@fontsource/roboto/700.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
 
     <BrowserRouter>
+
         <SnackbarProvider>
+
             <App />
+
         </SnackbarProvider>
+        
     </BrowserRouter>
 
 )

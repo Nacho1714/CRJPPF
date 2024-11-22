@@ -18,6 +18,8 @@ function Detail() {
         (async () => {
             try {
                 const visitor = await VisitorService.findByIdMapping(id)
+
+                console.log('visitorDetail', visitor)
                 setVisitor(visitor)
             } catch (errorMessage) {
                 enqueueSnackbar(errorMessage, {
@@ -70,7 +72,7 @@ function Detail() {
                     {/* Detalle */}
                     <Row>
 
-                        <Col className='mt-5' xs={6}>
+                        <Col className="mt-5" xs={6}>
 
                             <Col xs={12}>
 
@@ -135,24 +137,24 @@ function Detail() {
 
                                 <Col xs={6}>
 
-                                    <h3 className="mb-4">Datos de la visita</h3>
+                                    <h3 className="mb-4">Procedencia</h3>
 
-                                    {/* Empleado */}
+                                    {/* Institucion Gubernamental */}
                                     <Col xs={12}>
 
                                         <p>
-                                            <span className="fw-bold">Empleado: </span>
-                                            {visitor.employee}
+                                            <span className="fw-bold">Institución Gubernamental: </span>
+                                            {visitor.government_institutions}
                                         </p>
 
                                     </Col>
 
-                                    {/* Oficina */}
+                                    {/* Departamento Institucional */}
                                     <Col xs={12}>
 
                                         <p>
-                                            <span className="fw-bold">Oficina: </span>
-                                            {visitor.office}
+                                            <span className="fw-bold">Departamento Institucional: </span>
+                                            {visitor.institutional_departments}
                                         </p>
 
                                     </Col>
@@ -163,7 +165,7 @@ function Detail() {
 
                             <Row>
 
-                                <Col xs={12}>
+                                <Col xs={6}>
 
                                     <h3 className="mb-4">Observación</h3>
 
@@ -188,9 +190,35 @@ function Detail() {
                                     {/* Nota */}
                                     <Col xs={12}>
                                         <p>
-                                            <span className='fw-bold'>Nota: </span>
+                                            <span className="fw-bold">Nota: </span>
                                             {visitor.note || 'Sin observaciones'}
                                         </p>
+                                    </Col>
+
+                                </Col>
+
+                                <Col xs={6}>
+
+                                    <h3 className="mb-4">Destino</h3>
+
+                                    {/* Empleado */}
+                                    <Col xs={12}>
+
+                                        <p>
+                                            <span className="fw-bold">Empleado: </span>
+                                            {visitor.employee}
+                                        </p>
+
+                                    </Col>
+
+                                    {/* Oficina */}
+                                    <Col xs={12}>
+
+                                        <p>
+                                            <span className="fw-bold">Oficina: </span>
+                                            {visitor.office}
+                                        </p>
+
                                     </Col>
 
                                 </Col>

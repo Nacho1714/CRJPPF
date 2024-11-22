@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Query, ParseIntPipe, UseInterceptors, UploadedFile, ValidationPipe, Res } from '@nestjs/common';
 import { VisitorService } from './visitor.service';
-import { CreateVisitorDto, UpdateVisitorDto, FindVisitorDto } from './dto';
+import { CreateVisitorDto, UpdateVisitorDto, FindVisitorDto, DateRangeDto } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Auth } from '../auth/decorators';
@@ -35,12 +35,39 @@ export class VisitorController {
      * Listar todos los visitantes
      */
     @Auth()
-    @Get()
-    findAll(@Query() findVisitorDto: FindVisitorDto)  {
+    @Post('findAll')
+    findAll(
+        @Query() findVisitorDto: FindVisitorDto,
+        @Body(new ValidationPipe()) dateRange: DateRangeDto
+    )  {
 
-        return this.visitorService.findAll(findVisitorDto)
+        return this.visitorService.findAll(findVisitorDto, dateRange)
     }
 
+    /**
+     * Buscar las fechas de los registros existentes
+     */
+    @Get('date')
+    async getDates(){
+        return this.visitorService.getDates()
+    }
+
+    /**
+     * Buscar los años de los registros existentes
+     */
+    @Get('year')
+    async getYears(){
+        return this.visitorService.getYears()
+    }
+        
+    /**
+     * Buscar los años de los registros existentes
+     */
+    @Get('month/:year')
+    async getMonth(@Param('year', ParseIntPipe, ParamIdPipeTsPipe) year: number){
+        return this.visitorService.getMonth(year)
+    }
+        
     /**
      * Buscar un visitante por su id
      */
@@ -58,9 +85,7 @@ export class VisitorController {
         @Res() res: Response,
         @Param('imageName') imageName: string
     ) {
-
         const path = this.visitorService.getStaticVisitorImage(imageName);
-
         res.sendFile(path);
     }
 

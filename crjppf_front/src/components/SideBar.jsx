@@ -35,6 +35,7 @@ function Sidebar({ setIsAutenticate }) {
 
                 <div className="" style={{ height:"60%" }}>
                     <Link to="/" className="d-block text-light p-3"><FaTh /> Inicio</Link>
+                    <Link to="/summary" className="d-block text-light p-3"><FaTh /> Reporte</Link>
                 </div>
 
                 <div>
