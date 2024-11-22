@@ -81,7 +81,7 @@ model user {
   user_id    Int       @id @default(autoincrement())
   name       String    @db.VarChar(100)
   last_name  String    @db.VarChar(100)
-  profile    String    @unique @db.Char(4)
+  profile    String    @unique @db.Char(8)
   password   String    @db.VarChar(255)
   last_login DateTime? @db.Timestamp(6)
   is_active  Boolean   @default(true)
@@ -97,6 +97,7 @@ model visitor {
   employee_fk                  Int
   destination_fk               Int
   institutional_departments_fk Int?
+  another_origin               String?                    @db.VarChar(100)
   name                         String                     @db.VarChar(100)
   last_name                    String                     @db.VarChar(100)
   document_type                document_options
@@ -107,7 +108,6 @@ model visitor {
   exit                         DateTime?                  @db.Timestamp(6)
   created_at                   DateTime                   @default(now()) @db.Timestamp(6)
   updated_at                   DateTime                   @default(now()) @db.Timestamp(6)
-  another_origin               String?                    @db.VarChar(100)
   directorate_has_sector       directorate_has_sector     @relation(fields: [destination_fk], references: [destination_id], onDelete: NoAction, onUpdate: NoAction)
   employee                     employee                   @relation(fields: [employee_fk], references: [employee_id], onDelete: NoAction, onUpdate: NoAction)
   institutional_departments    institutional_departments? @relation(fields: [institutional_departments_fk], references: [institutional_departments_id], onDelete: NoAction, onUpdate: NoAction)
