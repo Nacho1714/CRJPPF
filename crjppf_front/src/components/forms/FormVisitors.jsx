@@ -233,7 +233,7 @@ export default function FormVisitors({ setShowConfirm, setAction }) {
                 <Container>
 
                     <Modal.Header closeButton>
-                        <Modal.Title>Registdrar Visitante</Modal.Title>
+                        <Modal.Title>Registrar Visitante</Modal.Title>
                     </Modal.Header>
 
                         <Carousel

@@ -5,6 +5,7 @@ import logoImg from "../assets/logo-caja.png"
 import {
     FaTh,
     FaSignOutAlt,
+    FaClipboardList
 } from "react-icons/fa";
 
 
@@ -13,7 +14,7 @@ function Sidebar({ setIsAutenticate }) {
     const onLogout = async () => {
 
         setIsAutenticate(false)
-        localStorage.removeItem('token')
+        localStorage.clear();
     }
 
     return (
@@ -35,7 +36,7 @@ function Sidebar({ setIsAutenticate }) {
 
                 <div className="" style={{ height:"60%" }}>
                     <Link to="/" className="d-block text-light p-3"><FaTh /> Inicio</Link>
-                    <Link to="/summary" className="d-block text-light p-3"><FaTh /> Reporte</Link>
+                    <Link to="/summary" className="d-block text-light p-3"><FaClipboardList /> Reporte</Link>
                 </div>
 
                 <div>
