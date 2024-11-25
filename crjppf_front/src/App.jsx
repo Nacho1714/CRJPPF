@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate } from "react-router-dom";
+import {jwtDecode} from 'jwt-decode';
 import './App.css'
 
 import RoutePrivate from './components/RoutePrivate'
@@ -9,11 +10,13 @@ import Detail from './pages/Detail';
 import Summary from './pages/Summary'
 
 import Dashboard from './pages/Dashboard';
+import ModalLogout from './components/modal/ModalLogout';
 
 function App() {
 
     const navigate = useNavigate()
     const [isAutenticate, setIsAutenticate] = useState(false)
+    const [showConfirm, setShowConfirm] = useState(false);
 
     useEffect(() => {
 
@@ -37,7 +40,26 @@ function App() {
         }
     }
 
+    useEffect(() => {
+
+        const token = localStorage.getItem('token');
+
+        if (!token) return 
+
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;  // Convertir a segundos
+        if (decodedToken.exp < currentTime) setShowConfirm(true)
+
+    }, [navigate, setIsAutenticate]);
+
     return (
+
+        <>
+        <ModalLogout 
+            setShowConfirm={setShowConfirm} 
+            showConfirm={showConfirm}
+            setIsAutenticate={setIsAutenticate}
+        />
 
         <Routes>
 
@@ -62,6 +84,8 @@ function App() {
             } />
 
         </Routes>
+
+        </>
 
     )
 }
